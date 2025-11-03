@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>探索未知世界</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            padding: 50px 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(90deg, #fff, #e0f7ff, #fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: shimmer 3s linear infinite;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .mystery-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            position: relative;
+        }
+        
+        .mystery-box i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .mystery-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            opacity: 0.8;
+        }
+        
+        .hint {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .hint:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .secret-reveal {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            margin-top: 15px;
+        }
+        
+        .secret-reveal.active {
+            max-height: 100px;
+        }
+        
+        .secret-text {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .btn-container {
+            margin: 40px 0 30px;
+            position: relative;
+        }
+        
+        .enter-btn {
+            display: inline-block;
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4, #a1c4fd);
+            background-size: 300% 300%;
+            color: #333;
+            text-decoration: none;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.4rem;
+            transition: all 0.4s ease;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: gradientShift 4s ease infinite;
+        }
+        
+        .enter-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            animation: none;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #a1c4fd);
+        }
+        
+        .enter-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+        
+        .enter-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-100%) rotate(45deg);
+            transition: transform 0.6s ease;
+        }
+        
+        .enter-btn:hover::after {
+            transform: translateX(100%) rotate(45deg);
+        }
+        
+        .btn-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        .floating-element:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-duration: 20s;
+        }
+        
+        .floating-element:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-duration: 25s;
+        }
+        
+        .floating-element:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 20%;
+            animation-duration: 18s;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            text-align: center;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 30px) rotate(90deg); }
+            50% { transform: translate(0, 60px) rotate(180deg); }
+            75% { transform: translate(-20px, 30px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 25px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .enter-btn {
+                padding: 16px 40px;
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+    
+    <div class="container">
+        <h1>探索数据内部世界</h1>
+        <p class="subtitle">准备好开始一段神秘的旅程了吗？点击下方按钮，发现惊喜</p >
+        
+        <div class="mystery-box">
+            <i class="fas fa-lock"></i>
+            <div class="mystery-text">目标目的地已被加密，点击进入按钮即可解锁</div>
+        </div>
+        
+        <div class="hint" id="hintButton">
+            <i class="fas fa-question-circle"></i>
+            <span>点击查看提示</span>
+        </div>
+        
+        <div class="secret-reveal" id="secretReveal">
+            <div class="secret-text">
+                <i class="fas fa-shield-alt"></i> 这是一个安全可靠的网站，内容精彩值得期待！
+            </div>
+        </div>
+        
+        <div class="btn-container">
+            <a href=" " class="enter-btn" id="enterButton">
+                <span class="btn-text">
+                    <i class="fas fa-door-open"></i> 点击进入神秘内部世界
+                </span>
+            </a >
+        </div>
+        
+        <p style="opacity: 0.8; margin-top: 20px;">勇敢的探索者，点击上方按钮开始发发</p >
+    </div>
+    
+    <div class="footer">
+        <p>© 2023 神秘入口 | 隐藏目的地增加探索乐趣</p >
+    </div>
+
+    <script>
+        // 设置目标网址 - 请修改为你的实际目标网址
+        const targetUrl = "https://lcdi08.cn/mobile";
+        
+        // 提示按钮交互
+        document.getElementById('hintButton').addEventListener('click', function() {
+            const secretReveal = document.getElementById('secretReveal');
+            secretReveal.classList.toggle('active');
+            
+            if (secretReveal.classList.contains('active')) {
+                this.innerHTML = '<i class="fas fa-eye-slash"></i> <span>隐藏提示</span>';
+            } else {
+                this.innerHTML = '<i class="fas fa-question-circle"></i> <span>点击查看提示</span>';
+            }
+        });
+        
+        // 进入按钮点击事件
+        document.getElementById('enterButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // 添加点击效果
+            this.style.transform = 'scale(0.95)';
+            this.style.animation = 'none';
+            
+            // 显示加载状态
+            const originalText = this.querySelector('.btn-text').innerHTML;
+            this.querySelector('.btn-text').innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在解锁目的地...';
+            
+            // 模拟加载过程
+            setTimeout(() => {
+                this.querySelector('.btn-text').innerHTML = '<i class="fas fa-check"></i> 目的地已解锁！';
+                
+                // 跳转到目标网站
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 800);
+            }, 1500);
+        });
+        
+        // 添加键盘事件支持（按回车键也可跳转）
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('enterButton').click();
+            }
+        });
+    </script>
+</body>
+</html>
